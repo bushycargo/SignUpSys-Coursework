@@ -13,6 +13,7 @@ def main():
     strPassword = None
     jsonUsers = {}
     jsonUsers['users'] = []
+    externalJson = None
 
     print("Sign up system")
     strUsername = input("Enter username: ") #Takes in username
@@ -26,8 +27,17 @@ def main():
         'salt': strSalt,
         'password': strPassword
     })
-    with open ('users.json', 'w') as output:
-        json.dump(jsonUsers, output, indent=4)
+
+    if not os.path.isfile('users.json'):
+        create = []
+        create.append(jsonUsers)
+        with open ('users.json', 'w') as outJson:
+            json.dump(create, outJson, indent=4)
+
+    with open ('users.json', 'w+') as outJson:
+        externalJson = json.load(outJson)
+        externalJson.append(jsonUsers)
+        json.dump(externalJson, outJson, indent=4)
 
 def enterPassword():
     strPswd = input("Enter password: ") #Enter a password and store to temp var
