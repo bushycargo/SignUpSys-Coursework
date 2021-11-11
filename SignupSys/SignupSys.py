@@ -1,5 +1,5 @@
 #Josep Haines
-#10-11-2021
+#10-11-2021 - 11-11-2021
 #Coursework Sign Up System
 
 import os
@@ -16,10 +16,10 @@ def main():
     strUsername = input("Enter username: ") #Takes in username
     while strPassword == None: #While there is no password stored loop
        strPassword = enterPassword()
-    strPassword = passwordHashing(strPassword)
-    strSalt = str(strPassword[0])
-    strPassword = str(strPassword[1])
-    writeFile(strUsername, strPassword, strSalt)
+    strPassword = passwordHashing(strPassword) #Hashes the password and returns the key and salt
+    strSalt = str(strPassword[0]) #Extracts the salt from the previous output
+    strPassword = str(strPassword[1]) #Extracts the key from previous output
+    writeFile(strUsername, strPassword, strSalt) #Writes to CSV file
 
 def enterPassword():
     strPswd = input("Enter password: ") #Enter a password and store to temp var
@@ -32,7 +32,7 @@ def enterPassword():
 def passwordHashing(strPswd):
     pswdSalt = os.urandom(16) #Generate 16 char salt
     key = hal.pbkdf2_hmac('sha256',strPswd.encode('utf-8'), pswdSalt, 100000) #Hashing password
-    return pswdSalt, key #Combining password and salt for output, when verifying seperate first 16 chars for the salt
+    return pswdSalt, key #Returns salt and key
 
 def writeFile(username, key, salt):
     if not os.path.isfile('users.csv'):#If the file doesn't exist run
